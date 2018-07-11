@@ -1,0 +1,77 @@
+.case{
+    width: 100px;
+    height: 100px;
+    font-size: 75px;
+    background-color: transparent;
+    border: none;
+}
+.case:hover{
+    cursor: pointer;
+}
+.case:focus{
+    outline: none;
+}
+.settings-container{
+    margin:auto;
+    margin-top:20px;
+    width:15%;
+    border:solid 1px black;
+    text-align: center;
+}
+.diff-container,.player-container{
+    margin:10px 0;
+}
+#difficulty,#player-symbol{
+    font-size:20px;
+}
+.scores{
+    width:95%;
+    text-align: center;
+    margin:auto;
+    font-size: 35px;
+}
+#xscore, #oscore{
+    font-size:50px;
+}
+.container{
+    margin:auto;
+    margin-top:10px;
+    width:25%;
+    border:solid 2px rgb(13, 39, 153);
+    text-align: center;
+}
+#board{
+    margin: auto;
+    border-collapse: collapse;
+}
+#tl, #t, #l, #m{
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    margin:0;
+}
+#bl, #b{
+    border-right: 2px solid black;
+    margin:0;
+}
+#r{
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    margin:0;
+}
+button#newgame, button#reset{
+    background-color:rgb(13, 39, 153);
+    border: none;
+    color: white;
+    border-radius:7px;
+    margin:20px;
+    padding:5px 15px;
+    font-size: 20px;
+}
+button#newgame:hover, button#reset:hover{
+    background-color: rgba(13, 39, 153,0.9);
+    cursor: pointer;
+}
+button#newgame:focus, button#reset:focus{
+    outline:none;
+    box-shadow:0 0 5px black;
+}

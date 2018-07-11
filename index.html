@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title>Tic-Tac-Toe</title>
+
+        <link href="css/normalize.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+        
+    </head>
+    
+    <body>
+        <div class="container">
+            <h1>Tic Tac Toe <span id="turn"></span></h1>
+            <table id="board">
+                <tr>
+                    <td id="tl"><button class="case" id="case1" ></button></td>
+                    <td id="t"><button class="case" id="case2"></button></td>
+                    <td id="tr"><button class="case" id="case3"></button></td>         
+                </tr>
+                <tr>
+                    <td id="l"><button class="case" id="case4"></button></td>
+                    <td  id="m"><button class="case" id="case5"></button></td>
+                    <td id="r"><button class="case" id="case6"></button></td>         
+                </tr>
+                <tr>
+                    <td id="bl"><button class="case" id="case7"></button></td>
+                    <td id="b"><button class="case" id="case8"></button></td>
+                    <td id="br"><button class="case" id="case9" ></button></td>             
+                </tr>           
+            </table>
+            <button id="newgame">New game</button>
+        </div>
+
+        <div class="settings-container">
+            <div class="diff-container">
+                <span style="font-size:25px;">Difficulty: </span> 
+                <select id="difficulty">
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                </select>
+            </div>
+            
+            <table class="scores">
+                <tr>
+                    <td>X score</td>
+                    <td>O score</td>
+                </tr>
+                <tr>
+                    <td><span id="xscore">0</span></td>
+                    <td><span id="oscore">0</span></td>
+                </tr>
+            </table>
+
+            <div class="player-container">
+                <span style="font-size:25px;">You play: </span> 
+                    <select id="player-symbol">
+                        <option value="x">X</option>
+                        <option value="o">O</option>
+                </select>
+            </div>
+            <button id="reset">Reset</button>
+        </div>
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/script.js"></script>
+    </body>
+</html>
