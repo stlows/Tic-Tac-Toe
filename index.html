@@ -1,66 +1,77 @@
 <html>
-    <head>
-        <title>Tic-Tac-Toe</title>
+  <head>
+    <title>Tic-Tac-Toe</title>
 
-        <link href="css/normalize.css" rel="stylesheet">
-        <link href="css/style.css" rel="stylesheet">
-        
-    </head>
-    
-    <body>
-        <div class="container">
-            <h1>Tic Tac Toe <span id="turn"></span></h1>
-            <table id="board">
-                <tr>
-                    <td id="tl"><button class="case" id="case1" ></button></td>
-                    <td id="t"><button class="case" id="case2"></button></td>
-                    <td id="tr"><button class="case" id="case3"></button></td>         
-                </tr>
-                <tr>
-                    <td id="l"><button class="case" id="case4"></button></td>
-                    <td  id="m"><button class="case" id="case5"></button></td>
-                    <td id="r"><button class="case" id="case6"></button></td>         
-                </tr>
-                <tr>
-                    <td id="bl"><button class="case" id="case7"></button></td>
-                    <td id="b"><button class="case" id="case8"></button></td>
-                    <td id="br"><button class="case" id="case9" ></button></td>             
-                </tr>           
-            </table>
-            <button id="newgame">New game</button>
-        </div>
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="js/vue.js"></script>
+    <script defer src="js/vue-instance.js"></script>
+  </head>
 
-        <div class="settings-container">
-            <div class="diff-container">
-                <span style="font-size:25px;">Difficulty: </span> 
-                <select id="difficulty">
-                    <option value=1>1</option>
-                    <option value=2>2</option>
-                    <option value=3>3</option>
-                </select>
-            </div>
-            
-            <table class="scores">
-                <tr>
-                    <td>X score</td>
-                    <td>O score</td>
-                </tr>
-                <tr>
-                    <td><span id="xscore">0</span></td>
-                    <td><span id="oscore">0</span></td>
-                </tr>
-            </table>
+  <body>
+    <div id="app">
+      <div class="container">
+        <h1>Tic Tac Toe <span id="turn"></span></h1>
+        <h4 class="mb-1">To play: {{ currentPlayer() }}</h4>
+        <table id="board">
+          <tr>
+            <td id="tl" class="case" @click="setTile(0, 0)">
+              {{ board[0][0] }}
+            </td>
+            <td id="t" class="case" @click="setTile(0, 1)">
+              {{ board[0][1] }}
+            </td>
+            <td id="tr" class="case" @click="setTile(0, 2)">
+              {{ board[0][2] }}
+            </td>
+          </tr>
+          <tr>
+            <td id="l" class="case" @click="setTile(1, 0)">
+              {{ board[1][0] }}
+            </td>
+            <td id="m" class="case" @click="setTile(1, 1)">
+              {{ board[1][1] }}
+            </td>
+            <td id="r" class="case" @click="setTile(1, 2)">
+              {{ board[1][2] }}
+            </td>
+          </tr>
+          <tr>
+            <td id="bl" class="case" @click="setTile(2, 0)">
+              {{ board[2][0] }}
+            </td>
+            <td id="b" class="case" @click="setTile(2, 1)">
+              {{ board[2][1] }}
+            </td>
+            <td id="br" class="case" @click="setTile(2, 2)">
+              {{ board[2][2] }}
+            </td>
+          </tr>
+        </table>
 
-            <div class="player-container">
-                <span style="font-size:25px;">You play: </span> 
-                    <select id="player-symbol">
-                        <option value="x">X</option>
-                        <option value="o">O</option>
-                </select>
-            </div>
-            <button id="reset">Reset</button>
-        </div>
-        <script src="js/jquery-3.2.1.min.js"></script>
-        <script src="js/script.js"></script>
-    </body>
+        <table id="scores" class="mb-1">
+          <tr>
+            <td>{{ symbols[0] }} score</td>
+            <td>{{ symbols[1] }} score</td>
+          </tr>
+          <tr>
+            <td>{{ scores[0] }}</td>
+            <td>{{ scores[1] }}</td>
+          </tr>
+        </table>
+
+        <button @click="newRound">New Round</button>
+
+        <hr class="mb-1 mt-1" />
+
+        <p class="mb-1">
+          Difficulty:
+          <select v-model="difficulty">
+            <option value="1">Easy</option>
+            <option value="2" disabled>Medium</option>
+            <option value="3" disabled>Hard</option>
+          </select>
+        </p>
+      </div>
+    </div>
+  </body>
 </html>
