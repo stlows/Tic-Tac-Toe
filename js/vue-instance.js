@@ -13,6 +13,9 @@ var tieStyle = {
   backgroundColor: "red",
   color: "white"
 };
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 var app = new Vue({
   el: "#app",
   data: {
@@ -29,7 +32,8 @@ var app = new Vue({
     currentPlayerId: 0,
     difficulty: 1,
     type: "HC",
-    timeoutId: null
+    timeoutId: null,
+    showSettings: false
   },
   methods: {
     currentPlayer() {
@@ -222,7 +226,7 @@ var app = new Vue({
     botMove() {
       switch (this.difficulty) {
         case 1:
-          alert("Bot level 1 moves.");
+          this.botLevel1Move();
           break;
         case 2:
           alert("Bot level 2 moves.");
@@ -231,6 +235,18 @@ var app = new Vue({
           alert("Bot level 3 moves.");
           break;
       }
+    },
+    botLevel1Move() {
+      var availablePairs = [];
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          if (this.board[i][j] == "") {
+            availablePairs.push({ i, j });
+          }
+        }
+      }
+      var rand = getRandomInt(availablePairs.length);
+      this.setTile(availablePairs[rand].i, availablePairs[rand].j);
     }
   }
 });

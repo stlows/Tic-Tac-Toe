@@ -5,6 +5,10 @@
     <link href="css/style.css" rel="stylesheet" />
     <script src="js/vue.js"></script>
     <script defer src="js/vue-instance.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
@@ -143,11 +147,31 @@
             <option value="CC">Computer vs computer</option>
           </select>
         </p>
-        <ul id="logs">
+        <ul id="logs" class="mb-1">
           <li v-for="log in logs" class="log">
             {{ log }}
           </li>
         </ul>
+        <div class="text-left">
+
+        <span class="info-btn mb-1" @click="showSettings = !showSettings">
+          Settings and info
+        </span>
+        <template v-if="showSettings">
+            <h3 class="mb-1">Info</h3>
+            <h5>Bot level 1</h5>
+            <p>Random</p>
+            <h5>Bot level 2</h5>
+            <p>Will win if possible</p>
+            <p>Will block a simple tic-tac-toe from opponent</p>
+            <h5>Bot level 3</h5>
+            <p>Will never loose</p>
+            <h3 class="mb-1">Settings</h3>
+
+            <p>Symbols:</p>
+            <input type="text" value="X" />
+          </div>
+        </template>
       </div>
     </div>
   </body>

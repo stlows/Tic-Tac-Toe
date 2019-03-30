@@ -2,6 +2,7 @@
     margin:0;
     padding:0;
     box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
 }
 .container {
   margin: auto;
@@ -22,7 +23,6 @@ table#board {
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 10px;
-  font-family: 'Helvetica', sans-serif
 }
 #board td {
   width:1.5em;
@@ -63,6 +63,9 @@ button:hover{
 .mb-1{
     margin-bottom: 1em;
 }
+.text-left{
+  text-align: left;
+}
 table#scores{
     text-align: center;
     margin-right: auto;
@@ -85,6 +88,14 @@ ul#logs li.log{
 }
 ul#logs li.log:last-of-type{
   border-bottom: 1px solid #dddddd;
+}
+.info-btn{
+  color: #2f418d;
+  text-decoration: underline;
+  display: inline-block;
+}
+.info-btn:hover{
+  cursor: pointer;
 }
 
 /*
