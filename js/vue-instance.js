@@ -31,7 +31,8 @@ var app = new Vue({
     logs: [],
     disableAll: false,
     currentPlayerId: 0,
-    difficulty: 1,
+    myDebug: false,
+    difficulty: 2,
     type: "HC",
     timeoutId: null,
     delay: 300,
@@ -41,8 +42,14 @@ var app = new Vue({
     currentPlayer() {
       return this.symbols[this.currentPlayerId];
     },
+    otherPlayer() {
+      return this.symbols[this.nextPlayerId()];
+    },
+    nextPlayerId() {
+      return (this.currentPlayerId + 1) % 2;
+    },
     nextPlayer() {
-      this.currentPlayerId = (this.currentPlayerId + 1) % 2;
+      this.currentPlayerId = this.nextPlayerId();
     },
     setValue(x, y, val) {
       var newLine = this.board[x];
@@ -70,6 +77,11 @@ var app = new Vue({
         if (this.isBot(this.currentPlayerId)) {
           this.botMove();
         }
+      }
+    },
+    debug(msg) {
+      if (this.myDebug) {
+        this.logs.splice(0, 0, msg);
       }
     },
     log(msg) {
@@ -208,11 +220,11 @@ var app = new Vue({
           break;
       }
     },
-    availableTiles() {
+    availableTiles(board) {
       var availableTiles = [];
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
-          if (this.board[i][j] == "") {
+          if (board[i][j] == "") {
             availableTiles.push({ i, j });
           }
         }
@@ -220,12 +232,41 @@ var app = new Vue({
       return availableTiles;
     },
     botLevel1Move() {
-      var availableTiles = this.availableTiles();
+      var availableTiles = this.availableTiles(this.board);
       var rand = getRandomInt(availableTiles.length);
       var tile = availableTiles[rand];
+      this.debug("Bot played randomly");
       this.setTile(tile.i, tile.j);
     },
-    botLevel2Move() {},
+    botLevel2Move() {
+      var boardCopy = this.getBoardCopy();
+      var availableTiles = this.availableTiles(boardCopy);
+      for (var x = 0; x < availableTiles.length; x++) {
+        var tile = availableTiles[x];
+        // Check if bot can win
+        boardCopy[tile.i][tile.j] = this.currentPlayer();
+        var ttt = this.checkTicTacToe(boardCopy);
+        if (ttt != null && ttt.symbol == this.currentPlayer()) {
+          this.debug("Bot played to win");
+          this.setTile(tile.i, tile.j);
+          return;
+        }
+        boardCopy[tile.i][tile.j] = "";
+      }
+      for (var x = 0; x < availableTiles.length; x++) {
+        var tile = availableTiles[x];
+        // Check if bot can block a win
+        boardCopy[tile.i][tile.j] = this.otherPlayer();
+        var ttt = this.checkTicTacToe(boardCopy);
+        if (ttt != null && ttt.symbol == this.otherPlayer()) {
+          this.debug("Bot played to block a win");
+          this.setTile(tile.i, tile.j);
+          return;
+        }
+        boardCopy[tile.i][tile.j] = "";
+      }
+      this.botLevel1Move();
+    },
     checkWinPossibility() {},
     checkBlockPossibility() {},
     getBoardCopy() {
