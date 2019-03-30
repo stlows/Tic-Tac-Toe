@@ -6,6 +6,7 @@
 .container {
   margin: auto;
   margin-top: 10px;
+  margin-bottom: 30px;
   width: 50%;
   border: solid 2px #0b207e;
   text-align: center;
@@ -21,6 +22,7 @@ table#board {
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 10px;
+  font-family: 'Helvetica', sans-serif
 }
 #board td {
   width:1.5em;
@@ -70,6 +72,19 @@ table#scores{
 table#scores tr td{
     border: 1px solid #333;
     padding: 0.2em;
+}
+ul#logs{
+  list-style: none;
+  text-align: left;
+  border-collapse: collapse;
+}
+ul#logs li.log{
+  border: 1px solid #dddddd;
+  border-bottom: 0;
+  padding:.3em 1em;
+}
+ul#logs li.log:last-of-type{
+  border-bottom: 1px solid #dddddd;
 }
 
 /*

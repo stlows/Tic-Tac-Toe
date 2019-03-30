@@ -5,18 +5,20 @@ var defaultStyle = {
 var winningStyle = {
   backgroundColor: "green",
   color: "white"
-}
-
+};
+var hoverStyle = {
+  color: "#bbbbbb"
+};
+var tieStyle = {
+  backgroundColor: "red",
+  color: "white"
+};
 var app = new Vue({
   el: "#app",
   data: {
     symbols: ["X", "O"],
     scores: [0, 0],
-    board: [
-      ["", "", ""],
-      ["", "", ""],
-      ["", "", ""]
-    ],
+    board: [["", "", ""], ["", "", ""], ["", "", ""]],
     styles: [
       [defaultStyle, defaultStyle, defaultStyle],
       [defaultStyle, defaultStyle, defaultStyle],
@@ -26,6 +28,7 @@ var app = new Vue({
     disableAll: false,
     currentPlayerId: 0,
     difficulty: 1,
+    type: "HC",
     timeoutId: null
   },
   methods: {
@@ -35,18 +38,32 @@ var app = new Vue({
     nextPlayer() {
       this.currentPlayerId = (this.currentPlayerId + 1) % 2;
     },
+    setValue(x, y, val) {
+      var newLine = this.board[x];
+      newLine.splice(y, 1, val);
+      this.board.splice(x, 1, newLine);
+    },
+    setStyle(x, y, style) {
+      var newLine = this.styles[x];
+      newLine.splice(y, 1, style);
+      this.styles.splice(x, 1, newLine);
+    },
     setTile(x, y) {
       if (this.disableAll) return;
-      if (this.board[x][y] != "") return;
-      var newLine = this.board[x];
-      newLine.splice(y, 1, this.currentPlayer());
-      this.board.splice(x, 1, newLine);
+      this.setValue(x, y, this.currentPlayer());
+      this.setStyle(x, y, defaultStyle);
       var ttt = this.checkTicTacToe();
-      //alert(ttt);
       if (ttt != null) {
-        this.win(ttt);
+        if (ttt == "tie") {
+          this.tie();
+        } else {
+          this.win(ttt);
+        }
       } else {
         this.nextPlayer();
+        if (this.isBot(this.currentPlayerId)) {
+          this.botMove();
+        }
       }
     },
     win(winner) {
@@ -54,13 +71,29 @@ var app = new Vue({
       this.scores[this.currentPlayerId]++;
       this.disableAll = true;
       this.colorWinner(winner);
-      this.timeoutId = setTimeout(this.newRound, 500);
-
+      this.timeoutId = setTimeout(this.newRound, 1000);
     },
-    setStyle(x, y, style) {
-      var newLine = this.styles[x];
-      newLine.splice(y, 1, style);
-      this.styles.splice(x, 1, newLine);
+    tie() {
+      this.logs.push("Round is a tie.");
+      this.disableAll = true;
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          this.setStyle(i, j, tieStyle);
+        }
+      }
+      this.timeoutId = setTimeout(this.newRound, 1000);
+    },
+    hoverInTile(x, y) {
+      if (this.disableAll) return;
+      if (this.board[x][y] != "") return;
+      this.setValue(x, y, this.currentPlayer());
+      this.setStyle(x, y, hoverStyle);
+    },
+    hoverOutTile(x, y) {
+      if (this.disableAll) return;
+      if (this.styles[x][y] != hoverStyle) return;
+      this.setValue(x, y, "");
+      this.setStyle(x, y, defaultStyle);
     },
     colorWinner(winner) {
       if (winner === "h1") {
@@ -107,18 +140,16 @@ var app = new Vue({
     clearBoard() {
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
-          this.board[i][j] = "";
+          this.setValue(i, j, "");
         }
       }
-      this.$forceUpdate();
     },
     resetStyle() {
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
-          this.styles[i][j] = defaultStyle;
+          this.setStyle(i, j, defaultStyle);
         }
       }
-      this.$forceUpdate();
     },
     newRound() {
       clearInterval(this.timeoutId);
@@ -180,10 +211,26 @@ var app = new Vue({
       }
 
       if (this.count() == 9) {
-        return "nul";
+        return "tie";
       }
 
       return null;
+    },
+    isBot(id) {
+      return this.type.split("")[id] == "C";
+    },
+    botMove() {
+      switch (this.difficulty) {
+        case 1:
+          alert("Bot level 1 moves.");
+          break;
+        case 2:
+          alert("Bot level 2 moves.");
+          break;
+        case 3:
+          alert("Bot level 3 moves.");
+          break;
+      }
     }
   }
 });
