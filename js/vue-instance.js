@@ -21,6 +21,7 @@ var app = new Vue({
   data: {
     symbols: ["X", "O"],
     scores: [0, 0],
+    tiesCount: 0,
     board: [["", "", ""], ["", "", ""], ["", "", ""]],
     styles: [
       [defaultStyle, defaultStyle, defaultStyle],
@@ -33,6 +34,7 @@ var app = new Vue({
     difficulty: 1,
     type: "HC",
     timeoutId: null,
+    delay: 300,
     showSettings: false
   },
   methods: {
@@ -56,7 +58,7 @@ var app = new Vue({
       if (this.disableAll) return;
       this.setValue(x, y, this.currentPlayer());
       this.setStyle(x, y, defaultStyle);
-      var ttt = this.checkTicTacToe();
+      var ttt = this.checkTicTacToe(this.board);
       if (ttt != null) {
         if (ttt == "tie") {
           this.tie();
@@ -70,22 +72,26 @@ var app = new Vue({
         }
       }
     },
-    win(winner) {
-      this.logs.push(this.currentPlayer() + " wins the round.");
+    log(msg) {
+      this.logs.splice(0, 0, msg);
+    },
+    win(ttt) {
+      this.log(ttt.symbol + " wins the round.");
       this.scores[this.currentPlayerId]++;
       this.disableAll = true;
-      this.colorWinner(winner);
-      this.timeoutId = setTimeout(this.newRound, 1000);
+      this.colorWinner(ttt.tiles);
+      this.timeoutId = setTimeout(this.newRound, this.delay);
     },
     tie() {
-      this.logs.push("Round is a tie.");
+      this.log("Round is a tie.");
+      this.tiesCount++;
       this.disableAll = true;
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
           this.setStyle(i, j, tieStyle);
         }
       }
-      this.timeoutId = setTimeout(this.newRound, 1000);
+      this.timeoutId = setTimeout(this.newRound, this.delay);
     },
     hoverInTile(x, y) {
       if (this.disableAll) return;
@@ -99,46 +105,9 @@ var app = new Vue({
       this.setValue(x, y, "");
       this.setStyle(x, y, defaultStyle);
     },
-    colorWinner(winner) {
-      if (winner === "h1") {
-        this.setStyle(0, 0, winningStyle);
-        this.setStyle(0, 1, winningStyle);
-        this.setStyle(0, 2, winningStyle);
-      }
-      if (winner === "h2") {
-        this.setStyle(1, 0, winningStyle);
-        this.setStyle(1, 1, winningStyle);
-        this.setStyle(1, 2, winningStyle);
-      }
-      if (winner === "h3") {
-        this.setStyle(2, 0, winningStyle);
-        this.setStyle(2, 1, winningStyle);
-        this.setStyle(2, 2, winningStyle);
-      }
-      if (winner === "v1") {
-        this.setStyle(0, 0, winningStyle);
-        this.setStyle(1, 0, winningStyle);
-        this.setStyle(2, 0, winningStyle);
-      }
-      if (winner === "v2") {
-        this.setStyle(0, 1, winningStyle);
-        this.setStyle(1, 1, winningStyle);
-        this.setStyle(2, 1, winningStyle);
-      }
-      if (winner === "v3") {
-        this.setStyle(0, 2, winningStyle);
-        this.setStyle(1, 2, winningStyle);
-        this.setStyle(2, 2, winningStyle);
-      }
-      if (winner === "d1") {
-        this.setStyle(0, 0, winningStyle);
-        this.setStyle(1, 1, winningStyle);
-        this.setStyle(2, 2, winningStyle);
-      }
-      if (winner === "d2") {
-        this.setStyle(0, 2, winningStyle);
-        this.setStyle(1, 1, winningStyle);
-        this.setStyle(2, 0, winningStyle);
+    colorWinner(tiles) {
+      for (var x = 0; x < 3; x++) {
+        this.setStyle(tiles[x][0], tiles[x][1], winningStyle);
       }
     },
     clearBoard() {
@@ -161,6 +130,9 @@ var app = new Vue({
       this.resetStyle();
       this.currentPlayerId = 0;
       this.disableAll = false;
+      if (this.isBot(0)) {
+        this.botMove();
+      }
     },
     count() {
       var count = 0;
@@ -173,45 +145,45 @@ var app = new Vue({
       }
       return count;
     },
-    checkTicTacToe() {
-      var c1 = this.board[0][0];
-      var c2 = this.board[0][1];
-      var c3 = this.board[0][2];
-      var c4 = this.board[1][0];
-      var c5 = this.board[1][1];
-      var c6 = this.board[1][2];
-      var c7 = this.board[2][0];
-      var c8 = this.board[2][1];
-      var c9 = this.board[2][2];
+    checkTicTacToe(board) {
+      var c1 = board[0][0];
+      var c2 = board[0][1];
+      var c3 = board[0][2];
+      var c4 = board[1][0];
+      var c5 = board[1][1];
+      var c6 = board[1][2];
+      var c7 = board[2][0];
+      var c8 = board[2][1];
+      var c9 = board[2][2];
 
       // Horizontal
       if ((c1 != "") & (c1 == c2) & (c2 == c3)) {
-        return "h1";
+        return { tiles: [[0, 0], [0, 1], [0, 2]], symbol: c1 };
       }
       if ((c4 != "") & (c4 == c5) & (c4 == c6)) {
-        return "h2";
+        return { tiles: [[1, 0], [1, 1], [1, 2]], symbol: c4 };
       }
       if ((c7 != "") & (c7 == c8) & (c7 == c9)) {
-        return "h3";
+        return { tiles: [[2, 0], [2, 1], [2, 2]], symbol: c7 };
       }
 
       // Vertical
       if ((c1 != "") & (c1 == c4) & (c1 == c7)) {
-        return "v1";
+        return { tiles: [[0, 0], [1, 0], [2, 0]], symbol: c1 };
       }
       if ((c2 != "") & (c2 == c5) & (c2 == c8)) {
-        return "v2";
+        return { tiles: [[0, 1], [1, 1], [2, 1]], symbol: c2 };
       }
       if ((c3 != "") & (c3 == c6) & (c3 == c9)) {
-        return "v3";
+        return { tiles: [[0, 2], [1, 2], [2, 2]], symbol: c3 };
       }
 
       // Diagonal
       if ((c1 != "") & (c1 == c5) & (c1 == c9)) {
-        return "d1";
+        return { tiles: [[0, 0], [1, 1], [2, 2]], symbol: c5 };
       }
       if ((c3 != "") & (c3 == c5) & (c3 == c7)) {
-        return "d2";
+        return { tiles: [[0, 2], [1, 1], [2, 0]], symbol: c5 };
       }
 
       if (this.count() == 9) {
@@ -229,24 +201,39 @@ var app = new Vue({
           this.botLevel1Move();
           break;
         case 2:
-          alert("Bot level 2 moves.");
+          this.botLevel2Move();
           break;
         case 3:
           alert("Bot level 3 moves.");
           break;
       }
     },
-    botLevel1Move() {
-      var availablePairs = [];
+    availableTiles() {
+      var availableTiles = [];
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 3; j++) {
           if (this.board[i][j] == "") {
-            availablePairs.push({ i, j });
+            availableTiles.push({ i, j });
           }
         }
       }
-      var rand = getRandomInt(availablePairs.length);
-      this.setTile(availablePairs[rand].i, availablePairs[rand].j);
+      return availableTiles;
+    },
+    botLevel1Move() {
+      var availableTiles = this.availableTiles();
+      var rand = getRandomInt(availableTiles.length);
+      var tile = availableTiles[rand];
+      this.setTile(tile.i, tile.j);
+    },
+    botLevel2Move() {},
+    checkWinPossibility() {},
+    checkBlockPossibility() {},
+    getBoardCopy() {
+      var newArray = [];
+      for (var i = 0; i < 3; i++) {
+        newArray[i] = this.board[i].slice();
+      }
+      return newArray;
     }
   }
 });
