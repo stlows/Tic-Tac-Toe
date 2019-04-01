@@ -137,7 +137,7 @@ var app = new Vue({
     difficulty: 3,
     type: "CH",
     timeoutId: null,
-    delay: 300,
+    delay: 500,
     showSettings: false
   },
   methods: {
