@@ -116,224 +116,6 @@ function isSameSymetricBoard(board1, board2) {
   }
   return null;
 }
-function optimalMove(board, myId, oponentId, count) {
-  switch (count) {
-    case 0:
-      return optimal1stMove(board, myId, oponentId);
-    case 2:
-      return optimal3rdMove(board, myId, oponentId);
-    case 4:
-      return optimal5thMove(board, myId, oponentId);
-    case 6:
-      return optimal7thMove(board, myId, oponentId);
-  }
-  return null;
-}
-function optimal1stMove(board) {
-  if (isSameSymetricBoard(board, [["", "", ""], ["", "", ""], ["", "", ""]])) {
-    var possibles = [
-      { i: 0, j: 0 },
-      { i: 0, j: 2 },
-      { i: 2, j: 0 },
-      { i: 2, j: 2 },
-      { i: 1, j: 1 }
-    ];
-    return randomItem(possibles);
-  }
-
-  return null;
-}
-function optimal3rdMove(board, myId, oponentId) {
-  var possibles = [];
-
-  // 1st move in center
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [oponentId, "", ""],
-      ["", myId, ""],
-      ["", "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](2, 2));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      ["", oponentId, ""],
-      ["", myId, ""],
-      ["", "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](0, 0));
-    possibles.push(inverseSymetries[sym](0, 2));
-    possibles.push(inverseSymetries[sym](1, 0));
-    possibles.push(inverseSymetries[sym](1, 2));
-    possibles.push(inverseSymetries[sym](2, 0));
-    possibles.push(inverseSymetries[sym](2, 2));
-  }
-  // 1st move in corner
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, oponentId, ""],
-      ["", "", ""],
-      ["", "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 0));
-    possibles.push(inverseSymetries[sym](1, 1));
-    possibles.push(inverseSymetries[sym](2, 0));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, "", oponentId],
-      ["", "", ""],
-      ["", "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 0));
-    possibles.push(inverseSymetries[sym](2, 0));
-    possibles.push(inverseSymetries[sym](2, 2));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, "", ""],
-      ["", oponentId, ""],
-      ["", "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](2, 2));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, "", ""],
-      ["", "", oponentId],
-      ["", "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 1));
-    possibles.push(inverseSymetries[sym](2, 0));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, "", ""],
-      ["", "", ""],
-      ["", "", oponentId]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](0, 2));
-    possibles.push(inverseSymetries[sym](2, 0));
-  }
-
-  if (possibles.length > 0) {
-    return randomItem(possibles);
-  }
-
-  return null;
-}
-function optimal5thMove(board, myId, oponentId) {
-  var possibles = [];
-
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [oponentId, "", ""],
-      ["", myId, oponentId],
-      ["", "", myId]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](2, 0));
-    possibles.push(inverseSymetries[sym](2, 1));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, oponentId, ""],
-      ["", myId, ""],
-      ["", "", oponentId]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 0));
-    possibles.push(inverseSymetries[sym](2, 0));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      ["", oponentId, ""],
-      [myId, myId, oponentId],
-      ["", "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](0, 0));
-    possibles.push(inverseSymetries[sym](2, 0));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, oponentId, ""],
-      [myId, "", ""],
-      [oponentId, "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 1));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, oponentId, ""],
-      ["", myId, ""],
-      ["", "", oponentId]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 0));
-    possibles.push(inverseSymetries[sym](2, 0));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, oponentId, ""],
-      [oponentId, "", ""],
-      [myId, "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 1));
-    possibles.push(inverseSymetries[sym](2, 2));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, "", oponentId],
-      [oponentId, "", ""],
-      [myId, "", ""]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](2, 2));
-  }
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [myId, oponentId, myId],
-      ["", "", ""],
-      ["", "", oponentId]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](2, 0));
-  }
-
-  if (possibles.length > 0) {
-    return randomItem(possibles);
-  }
-
-  return null;
-}
-function optimal7thMove(board, myId, oponentId) {
-  if (
-    (sym = isSameSymetricBoard(board, [
-      [oponentId, myId, oponentId],
-      ["", myId, ""],
-      ["", oponentId, myId]
-    ]))
-  ) {
-    possibles.push(inverseSymetries[sym](1, 0));
-    possibles.push(inverseSymetries[sym](1, 2));
-  }
-
-  if (possibles.length > 0) {
-    return randomItem(possibles);
-  }
-
-  return null;
-}
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
@@ -341,6 +123,7 @@ function randomItem(arr) {
   var rand = getRandomInt(arr.length);
   return arr[rand];
 }
+var boardToStringSep = "|";
 var app = new Vue({
   el: "#app",
   data: {
@@ -357,7 +140,7 @@ var app = new Vue({
     logs: [],
     disableAll: false,
     currentPlayerId: 0,
-    myDebug: false,
+    myDebug: true,
     difficulty: 3,
     type: "CH",
     timeoutId: null,
@@ -366,7 +149,7 @@ var app = new Vue({
   },
   methods: {
     getSymbol(id) {
-      if (id === "") return "";
+      if (id === "") return " ";
       return id === 0 ? this.symbol0 : this.symbol1;
     },
     currentPlayer() {
@@ -396,6 +179,9 @@ var app = new Vue({
       if (this.board[x][y] === this.otherPlayerId()) return;
       this.setValue(x, y, this.currentPlayerId);
       this.setStyle(x, y, defaultStyle);
+      this.handleTicTacToe();
+    },
+    handleTicTacToe() {
       var ttt = this.checkTicTacToe(this.board);
       if (ttt !== null) {
         if (ttt === "tie") {
@@ -412,10 +198,11 @@ var app = new Vue({
     },
     debug(msg) {
       if (this.myDebug) {
-        this.logs.splice(0, 0, msg);
+        console.log(msg);
       }
     },
     log(msg) {
+      this.debug(msg);
       this.logs.splice(0, 0, msg);
     },
     win(ttt) {
@@ -468,6 +255,7 @@ var app = new Vue({
       }
     },
     newRound() {
+      this.debug("New Round");
       clearInterval(this.timeoutId);
       this.clearBoard();
       this.resetStyle();
@@ -476,6 +264,13 @@ var app = new Vue({
       if (this.isBot(0)) {
         this.botMove();
       }
+    },
+    newGame() {
+      this.debug("New Game");
+      this.scores = [0, 0];
+      this.tiesCount = 0;
+      this.logs = [];
+      this.newRound();
     },
     count() {
       var count = 0;
@@ -569,43 +364,21 @@ var app = new Vue({
       this.setTile(tile.i, tile.j);
     },
     botLevel2Move() {
-      var boardCopy = this.getBoardCopy();
-      var availableTiles = this.availableTiles(boardCopy);
-      for (var x = 0; x < availableTiles.length; x++) {
-        var tile = availableTiles[x];
-        // Check if bot can win
-        boardCopy[tile.i][tile.j] = this.currentPlayerId;
-        var ttt = this.checkTicTacToe(boardCopy);
-        if (ttt !== null && ttt.id === this.currentPlayerId) {
-          this.debug("Bot played to win");
-          this.setTile(tile.i, tile.j);
-          return;
-        }
-        boardCopy[tile.i][tile.j] = "";
+      var winPossibility = checkWinPossibility(this.currentPlayerId);
+      if (winPossibility !== null) {
+        this.debug("Bot played to win");
+        this.setTile(winPossibility.i, winPossibility.j);
       }
-      for (var x = 0; x < availableTiles.length; x++) {
-        var tile = availableTiles[x];
-        // Check if bot can block a win
-        boardCopy[tile.i][tile.j] = this.otherPlayerId();
-        var ttt = this.checkTicTacToe(boardCopy);
-        if (ttt !== null && ttt.id === this.otherPlayerId()) {
-          this.debug("Bot played to block a win");
-          this.setTile(tile.i, tile.j);
-          return;
-        }
-        boardCopy[tile.i][tile.j] = "";
+      var blockPossibility = checkWinPossibility(this.otherPlayerId());
+      if (blockPossibility !== null) {
+        this.debug("Bot played to block a win");
+        this.setTile(blockPossibility.i, blockPossibility.j);
       }
+
       this.botLevel1Move();
     },
     botLevel3Move() {
-      var boardCopy = this.getBoardCopy();
-
-      var optimal = optimalMove(
-        boardCopy,
-        this.currentPlayerId,
-        this.otherPlayerId(),
-        this.count()
-      );
+      var optimal = this.optimalMove();
       if (optimal === null) {
         this.botLevel2Move();
       } else {
@@ -613,14 +386,292 @@ var app = new Vue({
         this.setTile(optimal.i, optimal.j);
       }
     },
-    checkWinPossibility() {},
-    checkBlockPossibility() {},
+    checkWinPossibility(id) {
+      var boardCopy = this.getBoardCopy();
+      var availableTiles = this.availableTiles(boardCopy);
+      for (var x = 0; x < availableTiles.length; x++) {
+        var tile = availableTiles[x];
+        boardCopy[tile.i][tile.j] = id;
+        var ttt = this.checkTicTacToe(boardCopy);
+        if (ttt !== null && ttt.id === id) {
+          return { i: tile.i, j: tile.j };
+        }
+        boardCopy[tile.i][tile.j] = "";
+      }
+      return null;
+    },
     getBoardCopy() {
       var newArray = [];
       for (var i = 0; i < 3; i++) {
         newArray[i] = this.board[i].slice();
       }
       return newArray;
+    },
+    debugPossibles(possibleMoves) {
+      this.debug(this.getSymbol(this.currentPlayerId));
+      this.debug(
+        "Board:\n" +
+          this.boardPretty(this.currentPlayerId) +
+          "\nPossible moves:\n" +
+          this.boardPretty(this.currentPlayerId, possibleMoves)
+      );
+    },
+    optimalMove() {
+      switch (this.count()) {
+        case 0:
+          return this.optimal1stMove();
+        case 2:
+          return this.optimal3rdMove();
+        case 4:
+          return this.optimal5thMove();
+        case 6:
+          return this.optimal7thMove();
+      }
+      return null;
+    },
+    optimal1stMove() {
+      if (
+        isSameSymetricBoard(this.board, [
+          ["", "", ""],
+          ["", "", ""],
+          ["", "", ""]
+        ])
+      ) {
+        var possibles = [
+          { i: 0, j: 0 },
+          { i: 0, j: 2 },
+          { i: 2, j: 0 },
+          { i: 2, j: 2 },
+          { i: 1, j: 1 }
+        ];
+        this.debugPossibles(possibles);
+        return randomItem(possibles);
+      }
+
+      return null;
+    },
+    optimal3rdMove() {
+      var myId = this.currentPlayerId;
+      var oponentId = this.otherPlayerId();
+      var possibles = [];
+
+      // 1st move in center
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [oponentId, "", ""],
+          ["", myId, ""],
+          ["", "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](2, 2));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          ["", oponentId, ""],
+          ["", myId, ""],
+          ["", "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](0, 0));
+        possibles.push(inverseSymetries[sym](0, 2));
+        possibles.push(inverseSymetries[sym](1, 0));
+        possibles.push(inverseSymetries[sym](1, 2));
+        possibles.push(inverseSymetries[sym](2, 0));
+        possibles.push(inverseSymetries[sym](2, 2));
+      }
+      // 1st move in corner
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, oponentId, ""],
+          ["", "", ""],
+          ["", "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 0));
+        possibles.push(inverseSymetries[sym](1, 1));
+        possibles.push(inverseSymetries[sym](2, 0));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, "", oponentId],
+          ["", "", ""],
+          ["", "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 0));
+        possibles.push(inverseSymetries[sym](2, 0));
+        possibles.push(inverseSymetries[sym](2, 2));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, "", ""],
+          ["", oponentId, ""],
+          ["", "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](2, 2));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, "", ""],
+          ["", "", oponentId],
+          ["", "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 1));
+        possibles.push(inverseSymetries[sym](2, 0));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, "", ""],
+          ["", "", ""],
+          ["", "", oponentId]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](0, 2));
+        possibles.push(inverseSymetries[sym](2, 0));
+      }
+
+      if (possibles.length > 0) {
+        this.debugPossibles(possibles);
+        return randomItem(possibles);
+      }
+
+      return null;
+    },
+    optimal5thMove() {
+      var myId = this.currentPlayerId;
+      var oponentId = this.otherPlayerId();
+      var possibles = [];
+
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [oponentId, "", ""],
+          ["", myId, oponentId],
+          ["", "", myId]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](2, 0));
+        possibles.push(inverseSymetries[sym](2, 1));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, oponentId, ""],
+          ["", myId, ""],
+          ["", "", oponentId]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 0));
+        possibles.push(inverseSymetries[sym](2, 0));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          ["", oponentId, ""],
+          [myId, myId, oponentId],
+          ["", "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](0, 0));
+        possibles.push(inverseSymetries[sym](2, 0));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, oponentId, ""],
+          [myId, "", ""],
+          [oponentId, "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 1));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, oponentId, ""],
+          ["", myId, ""],
+          ["", "", oponentId]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 0));
+        possibles.push(inverseSymetries[sym](2, 0));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, oponentId, ""],
+          [oponentId, "", ""],
+          [myId, "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 1));
+        possibles.push(inverseSymetries[sym](2, 2));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, "", oponentId],
+          [oponentId, "", ""],
+          [myId, "", ""]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](2, 2));
+      }
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [myId, oponentId, myId],
+          ["", "", ""],
+          ["", "", oponentId]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](2, 0));
+      }
+
+      if (possibles.length > 0) {
+        this.debugPossibles(possibles);
+        return randomItem(possibles);
+      }
+
+      return null;
+    },
+    optimal7thMove() {
+      var myId = this.currentPlayerId;
+      var oponentId = this.otherPlayerId();
+      var possibles = [];
+      if (
+        (sym = isSameSymetricBoard(this.board, [
+          [oponentId, myId, oponentId],
+          ["", myId, ""],
+          ["", oponentId, myId]
+        ]))
+      ) {
+        possibles.push(inverseSymetries[sym](1, 0));
+        possibles.push(inverseSymetries[sym](1, 2));
+      }
+
+      if (possibles.length > 0) {
+        this.debugPossibles(possibles);
+        return randomItem(possibles);
+      }
+
+      return null;
+    },
+    boardToStringLine(line) {
+      return (
+        this.getSymbol(line[0]) +
+        boardToStringSep +
+        this.getSymbol(line[1]) +
+        boardToStringSep +
+        this.getSymbol(line[2]) +
+        "\n"
+      );
+    },
+    boardPretty(id, possibleMoves = null) {
+      var boardCopy = this.getBoardCopy(this.board);
+      if (possibleMoves !== null) {
+        possibleMoves.forEach(function(tile) {
+          boardCopy[tile.i][tile.j] = id;
+        });
+      }
+      var result = this.boardToStringLine(boardCopy[0]);
+      result += this.boardToStringLine(boardCopy[1]);
+      result += this.boardToStringLine(boardCopy[2]);
+      return result;
     }
   },
   created: function() {
