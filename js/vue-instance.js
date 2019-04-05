@@ -1,129 +1,3 @@
-var defaultStyle = {
-  backgroundColor: "white",
-  color: "black"
-};
-var winningStyle = {
-  backgroundColor: "green",
-  color: "white"
-};
-var hoverStyle = {
-  color: "#bbbbbb"
-};
-var tieStyle = {
-  backgroundColor: "red",
-  color: "white"
-};
-var symetries = {
-  n: symetryN,
-  x: symetryX,
-  y: symetryY,
-  xy: symetryXY,
-  d: symetryD,
-  dx: symetryDX,
-  dy: symetryDY,
-  dxy: symetryDXY
-};
-var inverseSymetries = {
-  n: symetryN,
-  x: symetryX,
-  y: symetryY,
-  xy: symetryXY,
-  d: symetryD,
-  dx: symetryXD,
-  dy: symetryYD,
-  dxy: symetryXYD
-};
-function symetryN(i, j) {
-  return { i: i, j: j };
-}
-function symetryX(i, j) {
-  switch (j) {
-    case 0:
-      return { i: i, j: 2 };
-    case 1:
-      return { i: i, j: 1 };
-    case 2:
-      return { i: i, j: 0 };
-  }
-}
-function symetryY(i, j) {
-  switch (i) {
-    case 0:
-      return { i: 2, j: j };
-    case 1:
-      return { i: 1, j: j };
-    case 2:
-      return { i: 0, j: j };
-  }
-}
-function symetryXY(i, j) {
-  var symX = symetryX(i, j);
-  return symetryY(symX.i, symX.j);
-}
-function symetryD(i, j) {
-  return { i: j, j: i };
-}
-function symetryDX(i, j) {
-  var symD = symetryD(i, j);
-  return symetryX(symD.i, symD.j);
-}
-function symetryXD(i, j) {
-  var symX = symetryX(i, j);
-  return symetryD(symX.i, symX.j);
-}
-function symetryDY(i, j) {
-  var symD = symetryD(i, j);
-  return symetryY(symD.i, symD.j);
-}
-function symetryYD(i, j) {
-  var symY = symetryY(i, j);
-  return symetryD(symY.i, symY.j);
-}
-function symetryDXY(i, j) {
-  var symD = symetryD(i, j);
-  return symetryXY(symD.i, symD.j);
-}
-function symetryXYD(i, j) {
-  var symXY = symetryXY(i, j);
-  return symetryD(symXY.i, symXY.j);
-}
-function isSameBoard(board1, bord2) {
-  for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++) {
-      if (board1[i][j] !== bord2[i][j]) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-function getSymetricBoard(board, symFunc) {
-  var newBoard = [["", "", ""], ["", "", ""], ["", "", ""]];
-  for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++) {
-      var symetry = symFunc(i, j);
-      newBoard[i][j] = board[symetry.i][symetry.j];
-    }
-  }
-  return newBoard;
-}
-function isSameSymetricBoard(board1, board2) {
-  for (symetry in symetries) {
-    var symetricBoard = getSymetricBoard(board2, symetries[symetry]);
-    if (isSameBoard(board1, symetricBoard)) {
-      return symetry;
-    }
-  }
-  return null;
-}
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-function randomItem(arr) {
-  var rand = getRandomInt(arr.length);
-  return arr[rand];
-}
-var boardToStringSep = "|";
 var app = new Vue({
   el: "#app",
   data: {
@@ -182,8 +56,6 @@ var app = new Vue({
       this.handleTicTacToe();
     },
     handleTicTacToe() {
-      console.log("handle");
-      console.log(this.boardPretty());
       var ttt = this.checkTicTacToe(this.board);
       if (ttt !== null) {
         if (ttt === "tie") {
@@ -416,9 +288,9 @@ var app = new Vue({
       this.debug(this.getSymbol(this.currentPlayerId));
       this.debug(
         "Board:\n" +
-          this.boardPretty(this.currentPlayerId) +
+          this.boardPretty() +
           "\nPossible moves:\n" +
-          this.boardPretty(this.currentPlayerId, possibleMoves)
+          this.boardPretty(possibleMoves)
       );
     },
     optimalMove() {
@@ -460,7 +332,6 @@ var app = new Vue({
       var oponentId = this.otherPlayerId();
       var possibles = [];
 
-      // 1st move in center
       if (
         (sym = isSameSymetricBoard(this.board, [
           [oponentId, "", ""],
@@ -484,7 +355,6 @@ var app = new Vue({
         possibles.push(inverseSymetries[sym](2, 0));
         possibles.push(inverseSymetries[sym](2, 2));
       }
-      // 1st move in corner
       if (
         (sym = isSameSymetricBoard(this.board, [
           [myId, oponentId, ""],
@@ -666,11 +536,11 @@ var app = new Vue({
         "\n"
       );
     },
-    boardPretty(id, possibleMoves = null) {
+    boardPretty(possibleMoves = null) {
       var boardCopy = this.getBoardCopy();
       if (possibleMoves !== null) {
         possibleMoves.forEach(function(tile) {
-          boardCopy[tile.i][tile.j] = id;
+          boardCopy[tile.i][tile.j] = "P";
         });
       }
       var result = this.boardToStringLine(boardCopy[0]);
