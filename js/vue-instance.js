@@ -182,6 +182,8 @@ var app = new Vue({
       this.handleTicTacToe();
     },
     handleTicTacToe() {
+      console.log("handle");
+      console.log(this.boardPretty());
       var ttt = this.checkTicTacToe(this.board);
       if (ttt !== null) {
         if (ttt === "tie") {
@@ -364,15 +366,17 @@ var app = new Vue({
       this.setTile(tile.i, tile.j);
     },
     botLevel2Move() {
-      var winPossibility = checkWinPossibility(this.currentPlayerId);
+      var winPossibility = this.checkWinPossibility(this.currentPlayerId);
       if (winPossibility !== null) {
         this.debug("Bot played to win");
         this.setTile(winPossibility.i, winPossibility.j);
+        return;
       }
-      var blockPossibility = checkWinPossibility(this.otherPlayerId());
+      var blockPossibility = this.checkWinPossibility(this.otherPlayerId());
       if (blockPossibility !== null) {
         this.debug("Bot played to block a win");
         this.setTile(blockPossibility.i, blockPossibility.j);
+        return;
       }
 
       this.botLevel1Move();
@@ -392,6 +396,7 @@ var app = new Vue({
       for (var x = 0; x < availableTiles.length; x++) {
         var tile = availableTiles[x];
         boardCopy[tile.i][tile.j] = id;
+        console.log({ boardCopy, ttt });
         var ttt = this.checkTicTacToe(boardCopy);
         if (ttt !== null && ttt.id === id) {
           return { i: tile.i, j: tile.j };
@@ -662,7 +667,7 @@ var app = new Vue({
       );
     },
     boardPretty(id, possibleMoves = null) {
-      var boardCopy = this.getBoardCopy(this.board);
+      var boardCopy = this.getBoardCopy();
       if (possibleMoves !== null) {
         possibleMoves.forEach(function(tile) {
           boardCopy[tile.i][tile.j] = id;
